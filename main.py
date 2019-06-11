@@ -2,12 +2,12 @@ import argparse
 import logging
 from sys import stdout
 
-import ujson
+import json
 
 
 def read_config(filename: str):
     with open(filename) as f:
-        return ujson.load(f)
+        return json.load(f)
 
 
 def validate_config(config: dict):
