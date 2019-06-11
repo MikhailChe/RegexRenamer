@@ -1,4 +1,6 @@
 import argparse
+import logging
+from sys import stdout
 
 import ujson
 
@@ -25,6 +27,9 @@ def main(options):
         path=options.path,
         config=config,
         output=options.output,
+        dry=options.dry,
+        makedirs=options.makedirs,
+        force_overwrite=options.force,
     )
 
 
@@ -33,19 +38,49 @@ if __name__ == '__main__':
     parser.add_argument(
         'path',
         default='.',
-        description='Path to directory containing files to be renamed'
+        help='Path to directory containing files to be renamed'
     )
     parser.add_argument(
         '--output',
         default='./renamed',
         required=True,
-        description='Output directory'
+        help='Path to output directory'
+    )
+    parser.add_argument(
+        '--force',
+        '-f',
+        action='store_true',
+        help='Overwrite file if it already exists'
     )
     parser.add_argument(
         '--config',
         default=None,
         required=True,
-        description='Path to config file'
+        help='Path to config file'
+    )
+    parser.add_argument(
+        '--dry',
+        action='store_true',
+        help='Dry run. Dont rename anything. Use with -v'
+    )
+    parser.add_argument(
+        '--verbose',
+        '-v',
+        action='count',
+        help='Verbose output',
+    )
+    parser.add_argument(
+        '--makedirs',
+        action='store_true',
+        help='Automatically create output directory if it doesnt exist'
     )
     args = parser.parse_args()
+
+    root_logger = logging.getLogger()
+    root_logger.addHandler(logging.StreamHandler(stdout))
+    if args.verbose:
+        if args.verbose == 2:
+            root_logger.setLevel(logging.INFO)
+        elif args.verbose == 3:
+            root_logger.setLevel(logging.DEBUG)
     main(args)
