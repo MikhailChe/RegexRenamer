@@ -38,19 +38,20 @@ if __name__ == '__main__':
     parser.add_argument(
         'path',
         default='.',
-        help='Path to directory containing files to be renamed'
+        type=str,
+        help='Path to directory containing files to be renamed',
     )
     parser.add_argument(
         '--output',
         default='./renamed',
-        required=True,
-        help='Path to output directory'
+        type=str,
+        help='Path to output directory',
     )
     parser.add_argument(
         '--force',
         '-f',
         action='store_true',
-        help='Overwrite file if it already exists'
+        help='Overwrite file if it already exists',
     )
     parser.add_argument(
         '--config',
@@ -78,7 +79,10 @@ if __name__ == '__main__':
 
     root_logger = logging.getLogger()
     root_logger.addHandler(logging.StreamHandler(stdout))
+    root_logger.setLevel(logging.ERROR)
     if args.verbose:
+        if args.verbose == 1:
+            root_logger.setLevel(logging.WARNING)
         if args.verbose == 2:
             root_logger.setLevel(logging.INFO)
         elif args.verbose == 3:
