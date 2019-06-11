@@ -26,6 +26,7 @@ def validate_config(config: dict):
 def main(options):
     log.debug('Reading and validating config file %s', options.config)
     config = validate_config(read_config(options.config))
+    log.debug('Read valid config %s', config)
     regexrenamer.renamer.rename_bunch(
         path=options.path,
         config=config,
@@ -36,7 +37,7 @@ def main(options):
     )
 
 
-if __name__ == '__main__':
+def config_and_start():
     parser = argparse.ArgumentParser(description='Rename files')
     parser.add_argument(
         'path',
@@ -79,16 +80,20 @@ if __name__ == '__main__':
         action='store_true',
         help='Automatically create output directory if it doesnt exist'
     )
-    args = parser.parse_args()
+    options = parser.parse_args()
 
     root_logger = logging.getLogger()
     root_logger.addHandler(logging.StreamHandler(stdout))
     root_logger.setLevel(logging.ERROR)
-    if args.verbose:
-        if args.verbose == 1:
+    if options.verbose:
+        if options.verbose == 1:
             root_logger.setLevel(logging.WARNING)
-        if args.verbose == 2:
+        if options.verbose == 2:
             root_logger.setLevel(logging.INFO)
-        elif args.verbose == 3:
+        elif options.verbose == 3:
             root_logger.setLevel(logging.DEBUG)
-    main(args)
+    main(options)
+
+
+if __name__ == '__main__':
+    config_and_start()

@@ -13,6 +13,7 @@ def rename_bunch(
     dry: bool, makedirs: bool, force_overwrite: bool,
 ):
     filenames = os.listdir(path)
+    log.info('Found files: %s', filenames)
     for origin, destination in find_replacements(filenames, config):
         log.info('%s -> %s', os.path.join(path, origin), os.path.join(output, destination))
         if makedirs:
@@ -38,4 +39,5 @@ def find_replacements(filenames: List[str], config: Dict[str, str]):
     for filename in filenames:
         for r in config.keys():
             if re.fullmatch(r, filename):
+                log.debug('Filename %s match regex %s', filename, r)
                 yield filename, re.sub(r, config[r], filename)
