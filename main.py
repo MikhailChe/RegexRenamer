@@ -1,8 +1,11 @@
 import argparse
+import json
 import logging
 from sys import stdout
 
-import json
+import regexrenamer.renamer
+
+log = logging.getLogger(__name__)
 
 
 def read_config(filename: str):
@@ -21,8 +24,8 @@ def validate_config(config: dict):
 
 
 def main(options):
+    log.debug('Reading and validating config file %s', options.config)
     config = validate_config(read_config(options.config))
-    import regexrenamer.renamer
     regexrenamer.renamer.rename_bunch(
         path=options.path,
         config=config,
@@ -38,6 +41,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'path',
         default='.',
+        nargs='?',
         type=str,
         help='Path to directory containing files to be renamed',
     )
