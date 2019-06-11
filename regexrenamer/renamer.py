@@ -14,15 +14,23 @@ def rename_bunch(
 ):
     filenames = os.listdir(path)
     log.info('Found files: %s', filenames)
+    if makedirs:
+        if not dry:
+            os.makedirs(os.path.abspath(os.path.join(output)), exist_ok=True)
+    else:
+        if not os.path.exists(os.path.abspath(os.path.join(output))):
+            log.error(
+                'Directory %s doesnt exist. Use --makedirs flag to force directory creation',
+                os.path.abspath(output),
+            )
+            return
+
     for origin, destination in find_replacements(filenames, config):
         log.info('%s -> %s', os.path.join(path, origin), os.path.join(output, destination))
-        if makedirs:
-            if not dry:
-                os.makedirs(os.path.dirname(os.path.join(output, destination)), exist_ok=True)
         do_copy = False
         if os.path.exists(os.path.join(output, destination)):
             if not force_overwrite:
-                log.warning('File %s already exists in directory %s', destination, output)
+                log.error('File %s already exists in directory %s', destination, output)
             else:
                 do_copy = True
         else:
