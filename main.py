@@ -1,6 +1,7 @@
 import argparse
 import json
 import logging
+import os
 from sys import stdout
 
 import regexrenamer.renamer
@@ -38,6 +39,10 @@ def main(options):
 
 
 def config_and_start():
+    APP_DIR = os.path.dirname(os.path.realpath(__file__))
+
+    DEFAULT_CONFIG_PATH = os.path.join(APP_DIR, 'configs', 'gerbers.json')
+
     parser = argparse.ArgumentParser(description='Rename files')
     parser.add_argument(
         'path',
@@ -60,8 +65,7 @@ def config_and_start():
     )
     parser.add_argument(
         '--config',
-        default=None,
-        required=True,
+        default=DEFAULT_CONFIG_PATH,
         help='Path to config file'
     )
     parser.add_argument(
@@ -92,6 +96,9 @@ def config_and_start():
             root_logger.setLevel(logging.INFO)
         elif options.verbose == 3:
             root_logger.setLevel(logging.DEBUG)
+    log.debug('APP_DIR: %s', APP_DIR)
+    log.debug('DEFAULT_CONFIG_PATH: %s', DEFAULT_CONFIG_PATH)
+    log.debug('Using config path %s', options.config)
     main(options)
 
 
