@@ -1,3 +1,9 @@
 {
-  "(.*)_BORDER.art": "\\1_BORDER.GKO"
+  "(.*)_BORDER.art": "\\1_BORDER.GKO",
+  "(.*)_BOTTOM.art": "\\1_BOTTOM.GBL",
+  "(.*)_TOP.art": "\\1_TOP.GTL",
+  "(.*)_INT(\\d{1}).art": "\\1_INT\\2.GL\\2",
+  "(.*)_PM([T,B]{1}).art": "\\1_PM\\2.G\\2P",
+  "(.*)_SM([T,B]{1}).art": "\\1_SM\\2.G\\2S",
+  "(.*)_SS([T,B]{1}).art": "\\1_SS\\2.G\\2O"
 }
